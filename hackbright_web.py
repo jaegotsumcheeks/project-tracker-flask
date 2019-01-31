@@ -12,6 +12,24 @@ def get_student_form():
 
     return render_template("student_search.html")
 
+    # def get_grades_by_github(github):
+    #     """Get a list of all grades for a student by their github username"""
+
+    #     QUERY = """
+    #         SELECT project_title, grade
+    #         FROM grades
+    #         WHERE student_github = :github
+    #         """
+
+    #     db_cursor = db.session.execute(QUERY, {'github': github})
+
+    #     rows = db_cursor.fetchall()
+
+    #     for row in rows:
+    #         print(f"Student {github} received grade of {row[1]} for {row[0]}")
+
+    #     return rows
+
 
 @app.route("/student")
 def get_student():
@@ -21,12 +39,20 @@ def get_student():
 
     first, last, github = hackbright.get_student_by_github(github)
 
-    html = render_template("student_info.html", 
+    project_title, grade = hackbright.get_grades_by_github(github)
+
+    print(project_title, grade)
+
+    
+
+    return render_template("student_info.html", 
                             first= first,
                             last= last,
-                            github= github)
+                            github= github,
+                            project_title = project_title,
+                            grade = grade)
 
-    return html
+   
 
 @app.route("/create-student")
 def create_student():
